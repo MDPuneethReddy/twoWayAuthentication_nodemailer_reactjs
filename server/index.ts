@@ -1,11 +1,13 @@
 import * as express from "express"
 import * as cors from "cors"
 import * as nodemailer from "nodemailer"
+require('dotenv').config();
 const users=[]
 const otps=[]
 const app=express()
 app.use(cors())
 app.use(express.json())
+console.log(process.env.REACT_APP_EMAIL)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -44,6 +46,7 @@ app.post("/api/getOtp",(req,res)=>{
         subject: 'OTP', 
         html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + otp +"</h1>" 
       };
+      console.log(mailOptions)
       transporter.sendMail(mailOptions,  (err, info)=> {
         if(err)
           res.status(400).send({error:"failed to send OTP"})
